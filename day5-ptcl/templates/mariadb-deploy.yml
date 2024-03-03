@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: mariadb-{{ .Release.Name }}-deployment
+
+spec:
+
+  replicas: 1
+
+  selector:
+
+    matchLabels:
+
+      app: mariadb
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: mariadb
+
+    spec:
+
+      containers:
+
+      - name: mariadb
+
+        image: hngtech11/mariadb:day1
+
+        env:
+          - name: MARIADB_USER
+
+            valueFrom:
+
+              configMapKeyRef:
+
+                name: wordpress-config
+
+                key: MARIADB_USER
+
+
+          - name: MARIADB_PASSWORD
+
+            valueFrom:
+
+              secretKeyRef:
+
+                name: wordpress-secrets
+
+                key: MARIADB_PASSWORD
+
+
+
+          - name: MARIADB_DATABASE
+
+            valueFrom:
+
+              configMapKeyRef:
+
+                name: wordpress-config
+
+                key: MARIADB_DATABASE
+
